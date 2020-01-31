@@ -1,0 +1,469 @@
+<!-- Copyright (C) 2019 Fondazione Istituto Italiano di Tecnologia (IIT) -->
+<!-- All Rights Reserved. -->
+
+<application>
+    
+    <name>iRonCub WBD data dumper module</name>
+    <description>collects data from the sensor suite for offline processing</description>
+    <authors>
+        <author email="prashanth.ramadoss@iit.it">Prashanth Ramadoss</author>
+        <author email="silvio.traversaro@iit.it">Silvio Traversaro</author>
+        <author email="hosameldin.mohamed@iit.it">Hosameldin Mohamed</author>
+    </authors>
+
+    <dependencies>  
+        
+        <!-- HEAD IMU -->
+        <port>/icub/inertial</port>
+        
+        <!-- BASE IMU -->
+        <port>/icub/xsens_inertial</port>
+   		<port>/icub/left_leg/inertials/measures:o</port>
+		<port>/icub/right_leg/inertials/measures:o</port>
+        
+        <!-- JOINT STATES -->
+        <port>/icub04/all_joints/stateExt:o</port>
+        <port>/icub04/all_joints/state:o</port>
+        
+        <!-- BODY PARTS STATES -->
+         <port>/icub/head/state:o</port>
+         <port>/icub/left_arm/state:o</port>
+         <port>/icub/right_arm/state:o</port>
+         <port>/icub/torso/state:o</port>
+         <port>/icub/left_leg/state:o</port>
+         <port>/icub/right_leg/state:o</port>
+         
+         <port>/icub/head/stateExt:o</port>
+         <port>/icub/left_arm/stateExt:o</port>
+         <port>/icub/right_arm/stateExt:o</port>
+         <port>/icub/torso/stateExt:o</port>
+         <port>/icub/left_leg/stateExt:o</port>
+         <port>/icub/right_leg/stateExt:o</port>
+        
+        <!-- 6 AXIS FT SENSORS -->
+        <port>/icub/left_arm/analog:o</port>
+		<port>/icub/right_arm/analog:o</port>
+        <port>/icub/left_leg/analog:o</port>
+		<port>/icub/right_leg/analog:o</port>
+		<port>/icub/left_foot/analog:o</port>
+		<port>/icub/right_foot/analog:o</port>
+        <port>/icub/left_leg/measures:o</port>
+		<port>/icub/right_leg/measures:o</port>
+		<port>/icub/left_foot/measures:o</port>
+		<port>/icub/right_foot/measures:o</port>
+        
+        <!-- FT Pusher -->
+        <port>/ft/ftpusher/analog:o</port>
+    </dependencies>
+    
+    <!-- yarprobotinterface for the FT pusher -->
+    <module>
+		<name>yarprobotinterface</name>
+		<parameters>--from FTPusher.ini </parameters>
+		<node>localhost</node>
+	</module>
+            
+    
+    <!-- HEAD IMU -->   
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/head/inertial --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-head-inertial</tag>
+    </module>
+    <connection>
+        <from>/icub/inertial</from>
+        <to>/dumper/icub/head/inertial</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <!-- BASE IMU -->    
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/waist/inertial --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-waist-inertial</tag>
+    </module>    
+    <connection>
+        <from>/icub/xsens_inertial</from>
+        <to>/dumper/icub/waist/inertial</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <!-- CONTACT WRENCHES -->
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/left_foot/cartesianEndEffectorWrench:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-left_foot-cartesianEndEffectorWrench:o</tag>
+    </module>    
+    <connection>
+        <from>/wholeBodyDynamics/left_foot/cartesianEndEffectorWrench:o</from>
+        <to>/dumper/icub/left_foot/cartesianEndEffectorWrench:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/right_foot/cartesianEndEffectorWrench:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-right_foot-cartesianEndEffectorWrench:o</tag>
+    </module>    
+    <connection>
+        <from>/wholeBodyDynamics/right_foot/cartesianEndEffectorWrench:o</from>
+        <to>/dumper/icub/right_foot/cartesianEndEffectorWrench:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/left_arm/cartesianEndEffectorWrench:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-left_arm-cartesianEndEffectorWrench:o</tag>
+    </module>    
+    <connection>
+        <from>/wholeBodyDynamics/left_arm/cartesianEndEffectorWrench:o</from>
+        <to>/dumper/icub/left_arm/cartesianEndEffectorWrench:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/right_arm/cartesianEndEffectorWrench:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-right_arm-cartesianEndEffectorWrench:o</tag>
+    </module>    
+    <connection>
+        <from>/wholeBodyDynamics/right_arm/cartesianEndEffectorWrench:o</from>
+        <to>/dumper/icub/right_arm/cartesianEndEffectorWrench:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <!-- JOINT STATES -->
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/all_joints/stateExt:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-all_joints-stateExt:o</tag>
+    </module>    
+    <connection>
+        <from>/icub04/all_joints/stateExt:o</from>
+        <to>/dumper/icub/all_joints/stateExt:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/all_joints/state:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-all_joints-state:o</tag>
+    </module>    
+    <connection>
+        <from>/icub04/all_joints/state:o</from>
+        <to>/dumper/icub/all_joints/state:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <!-- BODY PARTS STATES -->
+     <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/head/stateExt:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-head-stateExt:o</tag>
+    </module>    
+    <connection>
+        <from>/icub/head/stateExt:o</from>
+        <to>/dumper/icub/head/stateExt:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/head/state:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-head-state:o</tag>
+    </module>    
+    <connection>
+        <from>/icub/head/state:o</from>
+        <to>/dumper/icub/head/state:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+     <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/left_arm/stateExt:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-left_arm-stateExt:o</tag>
+    </module>    
+    <connection>
+        <from>/icub/left_arm/stateExt:o</from>
+        <to>/dumper/icub/left_arm/stateExt:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/left_arm/state:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-left_arm-state:o</tag>
+    </module>    
+    <connection>
+        <from>/icub/left_arm/state:o</from>
+        <to>/dumper/icub/left_arm/state:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+     <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/right_arm/stateExt:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-right_arm-stateExt:o</tag>
+    </module>    
+    <connection>
+        <from>/icub/right_arm/stateExt:o</from>
+        <to>/dumper/icub/right_arm/stateExt:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/right_arm/state:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-right_arm-state:o</tag>
+    </module>    
+    <connection>
+        <from>/icub/right_arm/state:o</from>
+        <to>/dumper/icub/right_arm/state:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+     <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/torso/stateExt:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-torso-stateExt:o</tag>
+    </module>    
+    <connection>
+        <from>/icub/torso/stateExt:o</from>
+        <to>/dumper/icub/torso/stateExt:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/torso/state:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-torso-state:o</tag>
+    </module>    
+    <connection>
+        <from>/icub/torso/state:o</from>
+        <to>/dumper/icub/torso/state:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+     <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/left_leg/stateExt:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-left_leg-stateExt:o</tag>
+    </module>    
+    <connection>
+        <from>/icub/left_leg/stateExt:o</from>
+        <to>/dumper/icub/left_leg/stateExt:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/left_leg/state:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-left_leg-state:o</tag>
+    </module>    
+    <connection>
+        <from>/icub/left_leg/state:o</from>
+        <to>/dumper/icub/left_leg/state:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+     <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/right_leg/stateExt:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-right_leg-stateExt:o</tag>
+    </module>    
+    <connection>
+        <from>/icub/right_leg/stateExt:o</from>
+        <to>/dumper/icub/right_leg/stateExt:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/right_leg/state:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-right_leg-state:o</tag>
+    </module>    
+    <connection>
+        <from>/icub/right_leg/state:o</from>
+        <to>/dumper/icub/right_leg/state:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    
+    <!-- 6 AXIS FT SENSORS -->
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/left_arm/analog:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-left_arm-analog:o</tag>
+    </module>    
+    <connection>
+        <from>/icub/left_arm/analog:o</from>
+        <to>/dumper/icub/left_arm/analog:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/right_arm/analog:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-right_arm-analog:o</tag>
+    </module>    
+    <connection>
+        <from>/icub/right_arm/analog:o</from>
+        <to>/dumper/icub/right_arm/analog:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/left_leg/analog:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-left_leg-analog:o</tag>
+    </module>    
+    <connection>
+        <from>/icub/left_leg/analog:o</from>
+        <to>/dumper/icub/left_leg/analog:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/right_leg/analog:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-right_leg-analog:o</tag>
+    </module>    
+    <connection>
+        <from>/icub/right_leg/analog:o</from>
+        <to>/dumper/icub/right_leg/analog:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/left_foot/analog:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-left_foot-analog:o</tag>
+    </module>    
+    <connection>
+        <from>/icub/left_foot/analog:o</from>
+        <to>/dumper/icub/left_foot/analog:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/right_foot/analog:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-right_foot-analog:o</tag>
+    </module>    
+    <connection>
+        <from>/icub/right_foot/analog:o</from>
+        <to>/dumper/icub/right_foot/analog:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/left_leg/measures:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-left_leg-measures:o</tag>
+    </module>    
+    <connection>
+        <from>/icub/left_leg/measures:o</from>
+        <to>/dumper/icub/left_leg/measures:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/right_leg/measures:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-right_leg-measures:o</tag>
+    </module>    
+    <connection>
+        <from>/icub/right_leg/measures:o</from>
+        <to>/dumper/icub/right_leg/measures:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/left_foot/measures:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-left_foot-measures:o</tag>
+    </module>    
+    <connection>
+        <from>/icub/left_foot/measures:o</from>
+        <to>/dumper/icub/left_foot/measures:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/right_foot/measures:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-right_foot-measures:o</tag>
+    </module>    
+    <connection>
+        <from>/icub/right_foot/measures:o</from>
+        <to>/dumper/icub/right_foot/measures:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/left_leg/inertials/measures:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-left_leg-inertials-measures:o</tag>
+    </module>    
+    <connection>
+        <from>/icub/left_leg/inertials/measures:o</from>
+        <to>/dumper/icub/left_leg/inertials/measures:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/icub/right_leg/inertials/measures:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-icub-right_leg-inertials-measures:o</tag>
+    </module>    
+    <connection>
+        <from>/icub/right_leg/inertials/measures:o</from>
+        <to>/dumper/icub/right_leg/inertials/measures:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+    
+    <module>
+        <name>yarpdatadumper</name>
+        <parameters>--name /dumper/ft/ftpusher/analog:o --type bottle</parameters>
+        <node>localhost</node>
+        <tag>walking-data-dumper-FT_Pusher-analog:o</tag>
+    </module>    
+    <connection>
+        <from>/ft/ftpusher/analog:o</from>
+        <to>/dumper/ft/ftpusher/analog:o</to>
+        <protocol>udp</protocol>        
+    </connection>
+
+</application>
